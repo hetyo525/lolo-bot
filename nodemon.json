@@ -1,0 +1,6 @@
+{
+  "verbose": true,
+  "watch": ["src"],
+  "ignore": ["src/bwd/provider/json/clientStorage/*"],
+  "exec": "node -r dotenv/config ./src/app.js"
+}

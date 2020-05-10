@@ -1,0 +1,38 @@
+{
+  "name": "lolo-bot",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node -r dotenv/config ./src/app.js",
+    "cleanup": "rm -rf node_modules && rm -f yarn.lock && yarn install",
+    "lint": "eslint . --fix"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "axios-retry": "^3.1.8",
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "imap-simple": "^5.0.0",
+    "klasa": "dirigeants/klasa",
+    "mailparser": "^2.7.7",
+    "prettier": "^2.0.5",
+    "sqlite3": "^4.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "lint-staged": "^9.5.0",
+    "nodemon": "^2.0.3"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}
