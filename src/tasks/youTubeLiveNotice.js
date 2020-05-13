@@ -1,6 +1,4 @@
 const { Task } = require('klasa');
-const Imaps = require('imap-simple');
-const simpleParser = require('mailparser').simpleParser;
 const Axios = require('axios');
 const axiosRetry = require('axios-retry');
 
@@ -19,7 +17,8 @@ module.exports = class extends Task {
   }
 
   async run() {
-    const mails = await fetchNewstMails();
+    const imap = this.client.providers.get('imap');
+    const mails = await imap.fetchNewestMails();
 
     await Promise.all(
       mails.map(
@@ -45,35 +44,3 @@ module.exports = class extends Task {
      */
   }
 };
-
-/**
- * 最新の未読メールを取得する
- * @returns {Promise<any[]>}
- */
-async function fetchNewstMails() {
-  const connection = await Imaps.connect({
-    imap: {
-      user: process.env['IMAP_MAIL_ADDRESS'],
-      password: process.env['IMAP_MAIL_PASSWORD'],
-      host: process.env['IMAP_MAIL_HOST'],
-      port: +process.env['IMAP_MAIL_PORT'],
-      tls: true,
-      authTimeout: 3000,
-    },
-  });
-
-  // 対象のメールボックスから「未読」のメールを取得する（取得時に「既読」にする）
-  await connection.openBox(process.env['MAIL_BOX_NAME']);
-  const mails = await connection.search(['UNSEEN'], { bodies: ['HEADER', 'TEXT', ''], markSeen: true });
-
-  const parsedMails = await Promise.all(
-    mails.map((mail) => {
-      const all = mail.parts.find((x) => x.which === '');
-      const id = mail.attributes.uid;
-      return simpleParser(`Imap-Id: ${id}\r\n${all.body}`);
-    })
-  );
-  await connection.end();
-
-  return parsedMails;
-}

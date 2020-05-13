@@ -27,7 +27,7 @@ let _client = null;
   server.once('close', async function () {
     // このへん動いてないかも。
     await server.removeAllListeners('request');
-    await this.client.schedule.clear();
+    await _client.schedule.clear();
   });
 
   server.listen(3000);
