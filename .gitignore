@@ -24,4 +24,4 @@ yarn-error.log*
 *.sw?
 
 # Schedule file
-src/bwd/provider/json/clientStorage
+src/bwd/provider/*
