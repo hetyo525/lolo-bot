@@ -9,7 +9,12 @@ const axios = Axios.create({
   },
   responseType: 'json',
 });
-axiosRetry(axios, { retries: 3 });
+axiosRetry(axios, {
+  retries: 3,
+  retryDelay: (count) => {
+    return count * 2000;
+  },
+});
 
 module.exports = class extends Task {
   constructor(...args) {
@@ -32,7 +37,7 @@ module.exports = class extends Task {
               avatar_url: matchAvatar[1],
               content: `https${matchLink[1]}`,
             });
-          }, index * 1000) // 同時に POST すると 429 になるので少しずらす
+          }, index * 2000) // 同時に POST すると 429 になるので少しずらす
       )
     );
   }
@@ -42,5 +47,6 @@ module.exports = class extends Task {
      * You can optionally define this method which will be run when the bot starts
      * (after login, so discord data is available via this.client)
      */
+    this.run();
   }
 };

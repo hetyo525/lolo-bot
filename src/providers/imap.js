@@ -37,13 +37,13 @@ module.exports = class extends Provider {
         console.info(`IMAP connected to ${this.config.imap.host}`);
         this._c.on('error', (err) => {
           // THIS IS REQUIRED not to crash the process on socket error
-          console.error(err);
+          console.error('on error', err);
         });
-        this._c.imap.on('close', () => {
+        this._c.imap.on('close', async () => {
           this._c = null;
-          setTimeout(() => {
+          await setTimeout(async () => {
             console.debug('IMAP reconnecting after error');
-            me.connect();
+            await me.connect();
           }, this.config.imap.authTimeout);
         });
       }
@@ -52,9 +52,9 @@ module.exports = class extends Provider {
       console.info(`IMAP ${boxName} opened`);
     } catch (ex) {
       console.error(ex);
-      setTimeout(() => {
+      await setTimeout(async () => {
         console.debug('IMAP initial reconnect');
-        me.connect();
+        await me.connect();
       }, this.config.imap.authTimeout);
     }
   }
