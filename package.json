@@ -9,7 +9,7 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "axios-retry": "^3.1.8",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
